@@ -1,0 +1,53 @@
+# Day 2-3 计划：进阶特性与工程化 (Advanced Features & Engineering)
+
+## 目标
+在高性能线程池的基础上，增加**业务关键特性**（优先级）并引入**工程化最佳实践**（单元测试），最后为下一阶段的**协程**做准备。
+
+---
+
+## Day 2: 优先级调度与任务窃取优化
+
+### 1. 优先级支持 (Priority Scheduling)
+**痛点**: 目前所有任务一视同仁 (FIFO)。但在实际系统中，UI 渲染或音频处理等任务需要比后台日志上传更早执行。
+
+**任务**:
+*   [ ] **接口改造**: 修改 `submit` 函数，支持传入优先级参数 (e.g., `Priority::High`, `Priority::Normal`).
+*   **数据结构升级**:
+    *   *方案 A*: 使用 `std::priority_queue` (堆实现)。缺点：锁竞争时重排开销大，且不利于窃取（只能偷堆顶？）。
+    *   *方案 B (推荐)*: **多级队列 (Multi-Level Queues)**。每个线程维护 3 个 `deque` (High, Normal, Low)。
+*   **调度逻辑更新**:
+    *   Worker 优先检查 High 队列，为空再检查 Normal...
+    *   **窃取逻辑升级**: 优先窃取受害者的高优先级任务。
+
+### 2. 优化任务窃取 (Stealing Refinement)
+*   [ ] **窃取策略优化**: 目前是简单的遍历。可以优化为**随机窃取 (Random Stealing)** 或 **基于负载的窃取**，减少无效的锁尝试。
+
+---
+
+## Day 3: 工程化与协程预热
+
+### 1. 引入单元测试 (Unit Testing)
+**痛点**: 目前依靠 `main.cpp` 的打印来验证，无法覆盖边缘情况，且难以回归。
+
+**任务**:
+*   [ ] **集成 Google Test**: 使用 `vcpkg` 安装 `gtest`。
+*   [ ] **编写测试用例**:
+    *   **基础功能**: 提交任务，获取结果。
+    *   **并发压力**: 100 线程同时提交 100k 任务。
+    *   **异常安全**: 任务抛出异常，`future.get()` 是否能捕获。
+    *   **优先级验证**: 高优先级任务是否真的先执行？
+
+### 2. 协程 (Coroutines) 预热
+**目标**: 为下一个大项目“基于协程的任务调度器”做准备。
+
+**任务**:
+*   [ ] **原理学习**: 理解 `co_await`, `co_return`, `std::coroutine_handle`。
+*   [ ] **最小原型**: 编写一个最简单的 C++20 协程，打印 "Hello" -> "Suspend" -> "Resume" -> "World"。
+*   [ ] **结合线程池**: 尝试将协程的 `resume()` 操作提交到我们的 `ThreadPoolFast` 中运行。
+
+---
+
+## 产出物 (Deliverables)
+1.  `src/thread_pool/thread_pool_fast.h` (更新：支持优先级)
+2.  `tests/thread_pool_test.cpp` (新增：GTest 测试文件)
+3.  `src/coroutines/hello_coro.cpp` (新增：协程实验)

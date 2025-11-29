@@ -1,0 +1,15 @@
+{
+      "version": "0.2.0",
+      "configurations": [
+            {
+                  "name": "Debug LearnApp (Root)",
+                  "type": "lldb",
+                  "request": "launch",
+                  "program": "${workspaceFolder}/build/LearnApp.exe",
+                  "args": [],
+                  "cwd": "${workspaceFolder}",
+                  "console": "externalTerminal",
+                  "preLaunchTask": "CMake: Build (Root)"
+            }
+      ]
+}

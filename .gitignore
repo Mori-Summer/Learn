@@ -1,0 +1,46 @@
+# Build directories
+build/
+out/
+bin/
+lib/
+
+# Cache directories
+.cache/
+.vs/
+*.user
+
+# CMake generated files
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+*.cmake
+!CMakeLists.txt
+!/cmake/*.cmake
+
+# Compiled Object files
+*.o
+*.obj
+*.res
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Compiled Static libraries
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+*.pdb
+*.ilk
+*.exp
+
+# OS generated files
+.DS_Store
+Thumbs.db

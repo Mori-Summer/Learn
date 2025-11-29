@@ -1,0 +1,39 @@
+{
+      "version": "2.0.0",
+      "tasks": [
+            // ==========================================
+            // Root Project (LearnApp) Tasks
+            // ==========================================
+            {
+                  "label": "CMake: Configure (Root)",
+                  "type": "shell",
+                  "command": "cmake",
+                  "args": [
+                        "-G",
+                        "Ninja",
+                        "-S",
+                        ".",
+                        "-B",
+                        "build",
+                        "-DCMAKE_BUILD_TYPE=Debug",
+                        "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON",
+                        "-DCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake"
+                  ],
+                  "group": "build",
+                  "detail": "Configure the root LearnApp project with Ninja"
+            },
+            {
+                  "label": "CMake: Build (Root)",
+                  "type": "shell",
+                  "command": "cmake",
+                  "args": [
+                        "--build",
+                        "build"
+                  ],
+                  "group": "build",
+                  "problemMatcher": "$gcc",
+                  "dependsOn": "CMake: Configure (Root)",
+                  "detail": "Build the root LearnApp project"
+            }
+      ]
+}

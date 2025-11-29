@@ -1,0 +1,28 @@
+{
+      "version": 3,
+      "cmakeMinimumRequired": {
+            "major": 3,
+            "minor": 20,
+            "patch": 0
+      },
+      "configurePresets": [
+            {
+                  "name": "windows-clang-ninja",
+                  "displayName": "Windows Clang Ninja",
+                  "description": "Target Windows using Clang and Ninja",
+                  "generator": "Ninja",
+                  "binaryDir": "${sourceDir}/build",
+                  "cacheVariables": {
+                        "CMAKE_C_COMPILER": "C:/Users/Maxwell/scoop/apps/llvm/current/bin/clang.exe",
+                        "CMAKE_CXX_COMPILER": "C:/Users/Maxwell/scoop/apps/llvm/current/bin/clang++.exe",
+                        "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
+                  }
+            }
+      ],
+      "buildPresets": [
+            {
+                  "name": "windows-clang-ninja",
+                  "configurePreset": "windows-clang-ninja"
+            }
+      ]
+}
