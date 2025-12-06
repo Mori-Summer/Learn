@@ -46,8 +46,3 @@
 *   [ ] **结合线程池**: 尝试将协程的 `resume()` 操作提交到我们的 `ThreadPoolFast` 中运行。
 
 ---
-
-## 产出物 (Deliverables)
-1.  `src/thread_pool/thread_pool_fast.h` (更新：支持优先级)
-2.  `tests/thread_pool_test.cpp` (新增：GTest 测试文件)
-3.  `src/coroutines/hello_coro.cpp` (新增：协程实验)
