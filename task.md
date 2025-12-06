@@ -8,11 +8,11 @@
 - [x] Benchmark comparison (ThreadPool vs ThreadPoolFast)
 - [x] Create Day 1 Summary
 
-## Day 2: Priority & Optimization [Pending]
-- [ ] Update `ThreadPoolFast` interface to support Priority
-- [ ] Implement Multi-Level Queues (High, Normal, Low)
-- [ ] Update Stealing logic for priority
-- [ ] Verify Priority Scheduling
+## Day 2: Priority & Optimization [Completed]
+- [x] Update `ThreadPoolFast` interface to support Priority (Implemented as `ThreadPoolPriority`)
+- [x] Implement Multi-Level Queues (High, Normal, Low)
+- [x] Update Stealing logic for priority (Optimized: Steal from back)
+- [x] Verify Priority Scheduling (Integrated into main.cpp)
 
 ## Day 3: Engineering & Coroutines [Pending]
 - [ ] Integrate Google Test (vcpkg)

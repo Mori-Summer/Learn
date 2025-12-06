@@ -2,10 +2,12 @@
 #include <future>
 #include <iomanip>
 #include <iostream>
+#include <syncstream>
 #include <thread>
 #include <vector>
 #include "thread_pool/thread_pool.h"
 #include "thread_pool/thread_pool_fast.h"
+#include "thread_pool/thread_pool_priority.h"
 
 // 性能测试配置
 const int NUM_TASKS = 500000;    // 任务数量 (增加数量以凸显差距)
@@ -96,6 +98,12 @@ int main() {
     // 2. 测试高性能线程池
     benchmark_fast_pool(num_threads);
 
+    std::cout << "\n----------------------------------------\n\n";
+
+    // 3. 测试优先级线程池 (验证顺序)
+    void benchmark_priority_pool(size_t num_threads);    // 前向声明
+    benchmark_priority_pool(2);    // 使用2个线程以确保发生排队
+
     std::cout << "\n========================================\n";
     std::cout << "Analysis:\n";
     std::cout << "ThreadPoolFast should significantly outperform ThreadPool\n";
@@ -103,4 +111,48 @@ int main() {
     std::cout << "and better cache locality (Work Stealing + Padding).\n";
 
     return 0;
+}
+
+// 测试优先级线程池
+void benchmark_priority_pool(size_t num_threads) {
+    using namespace parallel;
+    std::cout << "Testing ThreadPoolPriority (Verification)...\n";
+
+    ThreadPoolPriority pool(num_threads);
+
+    // 1. Occupy threads with blockers
+    std::cout << "  -> Submitting blockers to fill threads...\n";
+    pool.submit(Priority::Normal, [] {
+        std::this_thread::sleep_for(std::chrono::milliseconds(200));
+    });
+
+    pool.submit(Priority::Normal, [] {
+        std::this_thread::sleep_for(std::chrono::milliseconds(200));
+    });
+
+    std::this_thread::sleep_for(std::chrono::milliseconds(50));
+
+    // 2. Submit mixed priority tasks
+    std::cout << "  -> Submitting Low then High priority tasks...\n";
+    std::vector<std::future<void>> results;
+
+    for (int i = 0; i < 3; ++i) {
+        results.emplace_back(pool.submit(Priority::Low, [i] {
+            std::osyncstream(std::cout)
+                << "    [Low] Task " << i << " executed\n";
+        }));
+    }
+
+    for (int i = 0; i < 3; ++i) {
+        results.emplace_back(pool.submit(Priority::High, [i] {
+            std::osyncstream(std::cout)
+                << "    [HIGH] Task " << i << " executed\n";
+        }));
+    }
+
+    for (auto& res : results) {
+        res.get();
+    }
+    std::cout << "  -> Verification Done. High tasks should appear before Low "
+                 "tasks.\n";
 }
