@@ -11,7 +11,6 @@
 #include "thread_pool/thread_pool_fast.h"
 #include "thread_pool/thread_pool_priority.h"
 
-
 // ============================================
 // Benchmarking Utils (Retained)
 // ============================================
@@ -163,7 +162,19 @@ TEST(Coroutine, Integration) {
 // Main
 // ============================================
 
+#include "coroutine/day4_examples.h"
+
+// ... (existing code)
+
 int main(int argc, char** argv) {
+    // Check for specific mode flags
+    if (argc > 1 && std::string(argv[1]) == "--day4") {
+        test_day4_generator();
+        test_day4_lazy_task();
+        test_day4_awaiter();
+        return 0;
+    }
+
     std::cout << ">>> Running Unit Tests...\n";
     RUN_ALL_TESTS();
 

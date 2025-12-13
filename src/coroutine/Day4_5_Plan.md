@@ -53,10 +53,15 @@
 
 ### Day 4: 协程基础与生成器
 **目标**: 不依赖线程池，纯手写一个最简单的生成器，理解协程的生命周期。
-1.  **[ ] 编写 `Generator<T>`**:
+1.  **[x] 编写 `Generator<T>`**:
+    *   **实现代码**: [01_generator.cpp](file:///d:/C++/Learn/src/coroutine/01_generator.cpp) (Generator), [02_lazy_task.cpp](file:///d:/C++/Learn/src/coroutine/02_lazy_task.cpp) (Lazy Task & co_return)
     *   实现 `promise_type`：`yield_value` (用于传出数据), `suspend_always`。
     *   实现迭代器接口：使得可以通过 `for (int i : range(1, 10)) ...` 遍历协程。
-    *   **验证**: 打印斐波那契数列。
+    *   **验证**: 打印斐波那契数列 (已验证)。
+2.  **[x] 掌握 `Awaitable` (等待体)**:
+    *   **实现代码**: [03_awaiter.cpp](file:///d:/C++/Learn/src/coroutine/03_awaiter.cpp)
+    *   详解 `await_ready` (优化暂停), `await_suspend` (挂起逻辑), `await_resume` (返回值)。
+
 
 ### Day 5: 异步任务与线程池的完美融合
 **目标**: 将 Day 3 的“协程预热”进化为生产级实现，让协程真正“跑”在我们的 `ThreadPoolFast` 上。
